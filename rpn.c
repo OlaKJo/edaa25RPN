@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #define N		(10)
-#define STACK_MAX 100
+#define STACK_MAX 10
 
 struct Stack {
 	int		data[STACK_MAX];
@@ -47,8 +47,8 @@ int main(void)
 {
 	int a;
 	int accum_num = 0;
-	int stack_counter = 0;
 	struct Stack* stack = malloc(sizeof(struct Stack));
+	int numerator, denominator, term1, term2 = 0;
 
 	while(1) {
 		a = getchar();
@@ -57,26 +57,52 @@ int main(void)
 			a = getchar();
 		}
 		if (accum_num != 0) {
-			printf("the number %d was pushed to stack\n", (accum_num));
+			//printf("the number %d was pushed to stack\n", (accum_num));
+			Stack_Push(stack, accum_num);
 			accum_num = 0;
 		}
 
 		switch (a)
 			{
 				case '+':
-					printf("+\n");
+					//printf("+\n");
+					term1 = Stack_Top(stack);
+					Stack_Pop(stack);
+					term2 = Stack_Top(stack);
+					Stack_Pop(stack);
+
+					Stack_Push(stack, term1 + term2);
 					break;
+
 				case '-':
-					printf("-\n");
+					//printf("-\n");
+					term1 = Stack_Top(stack);
+					Stack_Pop(stack);
+					term2 = Stack_Top(stack);
+					Stack_Pop(stack);
+
+					Stack_Push(stack, term2 - term1);
 					break;
+
 				case '*':
-					printf("*\n");
+					term1 = Stack_Top(stack);
+					Stack_Pop(stack);
+					term2 = Stack_Top(stack);
+					Stack_Pop(stack);
+					Stack_Push(stack, term1 * term2);
+					//printf("*\n");
 					break;
 				case '/':
-					printf("/\n");
+					denominator = Stack_Top(stack);
+					Stack_Pop(stack);
+					numerator = Stack_Top(stack);
+					Stack_Pop(stack);
+					Stack_Push(stack, numerator / denominator);
+					//printf("/\n");
 					break;
 				case '\n':
-					printf("calculating\n");
+					printf("result is: %d\n", Stack_Top(stack));
+					Stack_Pop(stack);
 					break;
 			}
 		//printf("you pressed: %d\n", isdigit(a));
